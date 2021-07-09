@@ -1,0 +1,21 @@
+default_sg = "sg-0f98d202e78809e17"
+vpc_cidr_ip = "10.0.0.0/16"
+vpc_database_subnets = [
+  "subnet-0838812702f941a4a",
+  "subnet-03255864979b161d5",
+]
+vpc_id = "vpc-0c4653a0e155cbe4f"
+vpc_public_subnets = [
+  "subnet-0f11623a582321b9c",
+  "subnet-0df4e9dda1df8810e",
+  "subnet-03be203dfba4383b9",
+]
+
+
+#######################   RDS   ##########################
+
+db_endpoint = "letmepostgres.cd283jwi9ukt.ap-south-1.rds.amazonaws.com:5432"
+name = "letmepostgres"
+vpc_database_subnets = "letmepostgres-20210708050217193000000001"
+
+################
