@@ -1,0 +1,120 @@
+additional-modules = []
+bastion-private-dns = [
+  "",
+]
+bastion-private-ip = [
+  "",
+]
+bastion-public-dns = [
+  "",
+]
+bastion-public-ip = [
+  "",
+]
+bastion-ssh-username = ""
+cluster-auth-config = [
+  {
+    "binary_data" = tomap(null) /* of string */
+    "data" = tomap({
+      "mapAccounts" = <<-EOT
+      []
+
+      EOT
+      "mapRoles" = <<-EOT
+      - "groups":
+        - "system:bootstrappers"
+        - "system:nodes"
+        "rolearn": "arn:aws:iam::806067863659:role/let-me20210708083119044400000009"
+        "username": "system:node:{{EC2PrivateDNSName}}"
+
+      EOT
+      "mapUsers" = <<-EOT
+      []
+
+      EOT
+    })
+    "id" = "kube-system/aws-auth"
+    "metadata" = tolist([
+      {
+        "annotations" = tomap(null) /* of string */
+        "generate_name" = ""
+        "generation" = 0
+        "labels" = tomap({
+          "app.kubernetes.io/managed-by" = "Terraform"
+          "terraform.io/module" = "terraform-aws-modules.eks.aws"
+        })
+        "name" = "aws-auth"
+        "namespace" = "kube-system"
+        "resource_version" = "705"
+        "uid" = "e5f37ff4-6ab1-4cb4-98ce-57be335262b1"
+      },
+    ])
+  },
+]
+cluster-config = <<EOT
+apiVersion: v1
+preferences: {}
+kind: Config
+
+clusters:
+- cluster:
+    server: https://D96C33C7D75CC69F6B0620849836E3B2.gr7.ap-south-1.eks.amazonaws.com
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1EY3dPREE0TWpjd09Gb1hEVE14TURjd05qQTRNamN3T0Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTFVhCnNBUWVVeXBFaEtJSHU4WDVrVDY5N3J2aHNwVFhzOVZqaFFiU21TVHJvdGVjNTY1THkza2NqZVBwMDh1Q200MWsKQnZIa01mK2NhR0ZOK3g0YmZSZUpEbkJxZ1NNUXVoa014VXNYcHVTS2xBSm1idVNRdTZUMnMyaGVxQVR4dnNYdgozV0MydDZFUFNWSTZaUW9EaGo0aTFmSUFVa0RMVXU1Mkc0SFpBdndlOFFPellTajhlSnlOK01tK29DWDNielh4CkwwaEkyeHFnaHlLSkpWd3FVOFI1eFdPM1RJanNWeDZrN1hsT2RTTFljMGh6ZXRFVVRGNTMyT0FZclNiTXh5bHoKZldoU2dtMVFlejh1MndUKzFEVHdGODJiVXE0Nzl2TUVBRytUdTFrZU8yRTVHUWF6LzNVd21YODI4dmFHYnU3Rwo0OFVjOWl3WCt0Mlo1L1V0MjhFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZMaTkyTURIenRHU0d3ZTdlNEt6d2lGY1BuSVhNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFCckxqbkVXNG5KMFgvTGIxZ1NMOU5YVlhxNEdQdnIrR0J5Ym1nQ3dvOHRpMXVmUk5KWApCWWpYV2oxYk9NVmhKZGk3VzM2dWhkZWx6cHlCWXhZbWMrN2JMS21hN1dPTEJMNVlTRlhxeFhMNitMbWxnUGVKCnBiS2p1UFVOblMvSEx0UnI0alkwbFZGMDdzeUlLZUpKYldrUkF3VmdGYiszcnl0SHFpOHNXblFFMWxmTGY5bUQKRjlKejJmY3lTM0I2WXlBbWdVU0xJQStpbnZIS3orQnJxMUIwNTZoaW91TWxlRzhTSGZycndUNmFGN2hDUTAwOApXdTNqWEw0a09Tb2o0VFFUaTBZbHdMQTNqclNjZkF4UXBNeVc1ZlJXZWx2cEVRL1R6V2RKc0pwWTRFUDliRVQwCk8wdnRmWURCblFOcHhiNmpjbDhYbWZ6MUFDSG4wQVgzMG1rNwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  name: eks_let-me
+
+contexts:
+- context:
+    cluster: eks_let-me
+    user: eks_let-me
+  name: eks_let-me
+
+current-context: eks_let-me
+
+users:
+- name: eks_let-me
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      command: aws-iam-authenticator
+      args:
+        - "token"
+        - "-i"
+        - "let-me"
+
+EOT
+cluster-ssh-username = "ec2-user"
+cluster_name = "let-me"
+master-extra-disk = ""
+master-private-dns = [
+  "",
+]
+master-private-ips = [
+  "",
+]
+master-public-dns = [
+  "",
+]
+master-public-ips = [
+  "",
+]
+master-url = "https://D96C33C7D75CC69F6B0620849836E3B2.gr7.ap-south-1.eks.amazonaws.com"
+vpc_id = "vpc-0c4653a0e155cbe4f"
+vpc_public_subnets = tolist([
+  "subnet-0f11623a582321b9c",
+  "subnet-0df4e9dda1df8810e",
+  "subnet-03be203dfba4383b9",
+])
+worker-extra-disk = ""
+worker-private-dns = [
+  "",
+]
+worker-private-ips = [
+  "",
+]
+worker-public-dns = [
+  "",
+]
+worker-public-ips = [
+  "",
+]
+worker_node_security_group_id = "sg-0565d390ef41052e5"
