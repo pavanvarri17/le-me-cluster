@@ -1,3 +1,12 @@
+data "terraform_remote_state" "vpc" {
+  backend = "local"
+
+  config = {
+    path = "../vpc/terraform.tfstate"
+  }
+}
+
+
 variable "cluster_name" {
   type        = string
   description = "Name for of EKS cluster"
@@ -6,15 +15,15 @@ variable "cluster_name" {
 variable "subnets" {
   type        = list
   description = " Subnets for EKS to setup"
-  default=["subnet-0f11623a582321b9c",
-  "subnet-0df4e9dda1df8810e",
-  "subnet-03be203dfba4383b9",]
+  default=data.terraform_remote_state.vpc.outputs.vpc_public_subnets
+  
 
 }
 
 variable "vpc_id" {
   type        = string
   description = "Vpc for EKS to setup"
+  default=data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
 variable "kubernetes_version" {

@@ -1,5 +1,11 @@
 
+data "terraform_remote_state" "vpc" {
+  backend = "local"
 
+  config = {
+    path = "../vpc/terraform.tfstate"
+  }
+}
 
 
 
@@ -37,21 +43,20 @@ variable "db_password" {
 variable "vpc_id" {
   type        = string
   description = "Region of EKS to setup"
+  default=data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
 variable "subnets" {
   type        = list
   description = "subnets to setup rds"
-  default = [
-        "subnet-0838812702f941a4a",
-  "subnet-03255864979b161d5",
-    ]
+  default = data.terraform_remote_state.vpc.outputs.vpc_database_subnets
 }
 
 
 variable "security_groups" {
   type        = list
   description = "VPC for rds"
+  default=tolist([data.terraform_remote_state.vpc.outputs.default_sg]
 }
 
 variable "public_access" {
