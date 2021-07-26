@@ -11,7 +11,7 @@ output "cluster_name" {
 }
 
 output "vpc_public_subnets" {
-  value = "${var.subnets}"
+  value = "${var.private_subnets}"
 }
 
 output "vpc_id" {

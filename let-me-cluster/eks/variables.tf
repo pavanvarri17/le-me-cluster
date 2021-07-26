@@ -1,10 +1,3 @@
-data "terraform_remote_state" "vpc" {
-  backend = "local"
-
-  config = {
-    path = "../vpc/terraform.tfstate"
-  }
-}
 
 
 variable "cluster_name" {
@@ -12,10 +5,18 @@ variable "cluster_name" {
   description = "Name for of EKS cluster"
 }
 
-variable "subnets" {
+variable "public_subnets" {
   type        = list
   description = " Subnets for EKS to setup"
-  default=data.terraform_remote_state.vpc.outputs.vpc_public_subnets
+  default = []
+  
+
+}
+
+variable "private_subnets" {
+  type        = list
+  description = " Subnets for EKS to setup"
+  default = []
   
 
 }
@@ -23,7 +24,7 @@ variable "subnets" {
 variable "vpc_id" {
   type        = string
   description = "Vpc for EKS to setup"
-  default=data.terraform_remote_state.vpc.outputs.vpc_id
+  default = ""
 }
 
 variable "kubernetes_version" {
@@ -75,9 +76,14 @@ variable "cluster_endpoint_public_access_cidrs" {
                   "193.240.221.236/32",  # Theale and Belfast
                   "58.76.201.220/32",    # South Korea
                   "80.75.109.253/32",    # fuzztds office
-		  "35.202.29.179/32",
-		  "64.128.208.115/32",
-		  "35.237.252.153/32",
+                  "35.202.29.179/32",
+                  "64.128.208.115/32",
+                  "35.237.252.153/32",
+                  "149.117.75.11/32",
                 ]
 }
 
+variable "map_users" {
+  type =list
+  default = [{"groups":["system:masters"],"userarn":"arn:aws:iam::806067863659:user/ram-poc","username":"ram-poc"},{"groups":["system:masters"],"userarn":"arn:aws:iam::806067863659:user/rpramod-poc","username":"rpramod-poc"},{"groups":["system:masters"],"userarn":"arn:aws:iam::806067863659:user/nharinar-poc","username":"nharinar-poc"}]
+}

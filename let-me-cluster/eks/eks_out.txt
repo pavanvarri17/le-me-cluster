@@ -1,0 +1,127 @@
+additional-modules = []
+bastion-private-dns = [
+  "",
+]
+bastion-private-ip = [
+  "",
+]
+bastion-public-dns = [
+  "",
+]
+bastion-public-ip = [
+  "",
+]
+bastion-ssh-username = ""
+cluster-auth-config = [
+  {
+    "binary_data" = tomap(null) /* of string */
+    "data" = tomap({
+      "mapAccounts" = <<-EOT
+      []
+      
+      EOT
+      "mapRoles" = <<-EOT
+      - "groups":
+        - "system:bootstrappers"
+        - "system:nodes"
+        "rolearn": "arn:aws:iam::806067863659:role/let-new20210723072159674100000009"
+        "username": "system:node:{{EC2PrivateDNSName}}"
+      
+      EOT
+      "mapUsers" = <<-EOT
+      - "groups":
+        - "system:masters"
+        "userarn": "arn:aws:iam::806067863659:user/ram-poc"
+        "username": "ram-poc"
+      - "groups":
+        - "system:masters"
+        "userarn": "arn:aws:iam::806067863659:user/rpramod-poc"
+        "username": "rpramod-poc"
+      - "groups":
+        - "system:masters"
+        "userarn": "arn:aws:iam::806067863659:user/nharinar-poc"
+        "username": "nharinar-poc"
+      
+      EOT
+    })
+    "id" = "kube-system/aws-auth"
+    "metadata" = tolist([
+      {
+        "annotations" = tomap(null) /* of string */
+        "generate_name" = ""
+        "generation" = 0
+        "labels" = tomap({
+          "app.kubernetes.io/managed-by" = "Terraform"
+          "terraform.io/module" = "terraform-aws-modules.eks.aws"
+        })
+        "name" = "aws-auth"
+        "namespace" = "kube-system"
+        "resource_version" = "771"
+        "uid" = "83161b06-bb60-4280-b1c4-261da240b83b"
+      },
+    ])
+  },
+]
+cluster-config = <<EOT
+apiVersion: v1
+preferences: {}
+kind: Config
+
+clusters:
+- cluster:
+    server: https://8396903F57595488306BF7FE2291CA73.gr7.ap-south-1.eks.amazonaws.com
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1EY3lNekEzTVRjMU5sb1hEVE14TURjeU1UQTNNVGMxTmxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS1JGCld6ZllLOVZOSUkwY1VJQ2QxdW1tazVMMXZLZkRIdXNVdU5OdXhsUXYzU0RyU05NbFI4WUsxQjRodisyaFVyQVYKQjhUQ1JOZ2d5NGsvV0lJOGFjQjRzakdFZlI2VzhEcDNXbmZ3eUM3K3NiRXBoNFdwalFEUHoxRUxFbDhDUUdBdQprV2FIVjEvNStnS2Vqc0ZQdTZDK0RxaytLSUc1Zm9STE1TV0gvKzZ5RUdYQlF5VXFjSUpjVU5mRkpEbm00MFlWClR4WjlwQ1ZQQ21kcWJUTXUxRklneURVb0RjTkhSNjZlSUh2clhLUU41R0tOelNPV1J1ZGJES1JlVnErMzN6RmgKL0pjOXQ3MERFQTZzcm9renRFdndRV2lxSmFmMXhDbktWelBBNS9PRERSMlNHWFhjRlZuaUlIaUxxdXc0ZVJOYgpRcURUVTVPRmdzV0JZRHFXblQwQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZOcUJubHp2ZG1yWkpnOFNNN1dhaGgyK1Zjb3JNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBS1cxUnhZNDF1d2gyY0dNOVdsTTc2c0V3N0NObGtETmxta0RQaUVhQy90TjFVbW0zeApwNzBSbXF2QVQya1dpYXRXRzNNZngvMnVHYUlMekNMakc4Ny9rZmpOL1ZmR3VaN3plTkRqY0hiRXlpcVQwM3pMCjdtTTUwUmV2bDRyd3pnZmRmT1M2a0JWUDZ4L0NjV1o4ajBMdStmaTRrL3pwOXNSQllwNEtSdVYrZGIrS1dQQ1cKemVOcnpFU1pOK0RWVkRseFVBV3d0cDFNUFZ2OWpkYm5GQXhZNUdIMFVZSEhqbWNpVlFSNnFsK1RjdTg3VHB1RwpoNzllMHVvam9LZWtYTWx0MWZwYTVyV3NUejI3cGR6WE9ROCtaeGZWYTRFN1R5dlVYYzRiSHo5d3hpNmVLQXNZCjhUME1RVVY2UU5QQVBIelA3elhmQTVrdXYrYzQzU09NZm4vbgotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  name: eks_let-new
+
+contexts:
+- context:
+    cluster: eks_let-new
+    user: eks_let-new
+  name: eks_let-new
+
+current-context: eks_let-new
+
+users:
+- name: eks_let-new
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      command: aws-iam-authenticator
+      args:
+        - "token"
+        - "-i"
+        - "let-new"
+
+EOT
+cluster-ssh-username = "ec2-user"
+cluster_name = "let-new"
+master-extra-disk = ""
+master-private-dns = [
+  "",
+]
+master-private-ips = [
+  "",
+]
+master-public-dns = [
+  "",
+]
+master-public-ips = [
+  "",
+]
+master-url = "https://8396903F57595488306BF7FE2291CA73.gr7.ap-south-1.eks.amazonaws.com"
+vpc_id = ""
+vpc_public_subnets = tolist([])
+worker-extra-disk = ""
+worker-private-dns = [
+  "",
+]
+worker-private-ips = [
+  "",
+]
+worker-public-dns = [
+  "",
+]
+worker-public-ips = [
+  "",
+]
+worker_node_security_group_id = "sg-0470625c3ce1b09e4"

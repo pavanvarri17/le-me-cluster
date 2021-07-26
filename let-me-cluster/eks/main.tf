@@ -6,6 +6,14 @@ provider "aws" {
   profile = "terraform"
 }
 
+data "terraform_remote_state" "vpc" {
+  backend = "local"
+
+  config = {
+    path = "../vpc/terraform.tfstate"
+  }
+}
+
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
 }
@@ -35,13 +43,14 @@ module "eks" {
 
   cluster_name                   = "${var.cluster_name}"
   cluster_version                = "${var.kubernetes_version}"
-  subnets                        = var.subnets
+  subnets                = "${length(var.public_subnets) > 0 ? var.public_subnets :  data.terraform_remote_state.vpc.outputs.vpc_public_subnets}"
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-  vpc_id                         = var.vpc_id
+  vpc_id                         = "${length(var.vpc_id) > 0 ? var.vpc_id :  data.terraform_remote_state.vpc.outputs.vpc_id}"
   cluster_endpoint_public_access = "true"
   cluster_endpoint_private_access= "true"
   write_kubeconfig               = "true"
   kubeconfig_output_path             = "../"
+  map_users                      ="${var.map_users}"
   manage_aws_auth                = true
   cluster_create_timeout         = "${var.instance_create_timeout}m"
   tags = {
@@ -56,8 +65,8 @@ module "eks" {
       asg_max_size         = 6
       root_volume_size     = "100"
       root_volume_type     = "gp2"
-      public_ip            = "true"
-      subnets              = "${var.subnets}"
+      public_ip            = "false"
+      subnets           = "${length(var.private_subnets) > 0 ? var.private_subnets :  data.terraform_remote_state.vpc.outputs.vpc_private_subnets}"
       key_name             = "${var.cluster_name}"
     }
   ]

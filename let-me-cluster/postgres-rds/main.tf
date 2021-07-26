@@ -6,10 +6,19 @@ provider "aws" {
   profile = "terraform"
 }
 
+data "terraform_remote_state" "vpc" {
+  backend = "local"
+
+  config = {
+    path = "../vpc/terraform.tfstate"
+  }
+}
+
+
 resource "aws_security_group" "allow_postgres" {
   name        = "${var.db_name}-postgres-sg"
   description = "Allow postgres inbound traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = "${length(var.vpc_id) > 0 ? var.vpc_id :  data.terraform_remote_state.vpc.outputs.vpc_id}"
 
   tags = {
     Name = "${var.db_name}-postgres-sg"
@@ -61,7 +70,7 @@ module "db" {
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   # DB subnet group
-  subnet_ids = var.subnets
+  subnet_ids = "${length(var.private_subnets) > 0 ? var.private_subnets :  data.terraform_remote_state.vpc.outputs.vpc_private_subnets}"
 
   publicly_accessible = var.public_access == true ? "true" : "false"
   # DB option group
