@@ -10,7 +10,7 @@ data "terraform_remote_state" "vpc" {
   backend = "local"
 
   config = {
-    path = "../vpc/terraform.tfstate"
+    path = "../eks-cluster/terraform.tfstate"
   }
 }
 
@@ -83,3 +83,5 @@ module "db" {
   # Database Deletion Protection
   deletion_protection = false
 }
+
+
