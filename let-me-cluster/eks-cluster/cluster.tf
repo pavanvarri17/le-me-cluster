@@ -38,7 +38,7 @@ module "eks" {
 
   cluster_name                   = "${var.cluster_name}"
   cluster_version                = "${var.kubernetes_version}"
-  subnets                        = module.vpc.public_subnets
+  subnets                        = module.vpc.private_subnets
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
   vpc_id                         = module.vpc.vpc_id
   cluster_endpoint_public_access = "true"
@@ -91,7 +91,7 @@ module "eks" {
       root_volume_size     = "100"
       root_volume_type     = "gp2"
       public_ip            = "false"
-      subnets           =    module.vpc.private_subnets
+      subnets              = module.vpc.private_subnets
       key_name             = "${var.cluster_name}"
     }
   ]

@@ -35,4 +35,8 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_nat_gateway   = true
   single_nat_gateway   = true
+
+  private_subnet_tags = {
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared" # EKS adds this and TF would want to remove then later
+  }
 }
